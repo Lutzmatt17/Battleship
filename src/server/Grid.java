@@ -30,11 +30,11 @@ public class Grid {
         //will build a ship north
 
         if (direction == 1 && (y - 4) >= 0) {
-                grid[x][y] = ship.CARRIER.getSymbol();
-                grid[x][y - 1] = ship.CARRIER.getSymbol();
-                grid[x][y - 2] = ship.CARRIER.getSymbol();
-                grid[x][y - 3] = ship.CARRIER.getSymbol();
-                grid[x][y - 4] = ship.CARRIER.getSymbol();
+            grid[x][y] = ship.CARRIER.getSymbol();
+            grid[x][y - 1] = ship.CARRIER.getSymbol();
+            grid[x][y - 2] = ship.CARRIER.getSymbol();
+            grid[x][y - 3] = ship.CARRIER.getSymbol();
+            grid[x][y - 4] = ship.CARRIER.getSymbol();
 
             //will build a ship south
         } else if (direction == 2 && (y + 4) < SIZE) {
@@ -60,7 +60,85 @@ public class Grid {
         }
     }
 
+    private boolean placeBattleship() {
+        boolean placed = false;
+        Random rand = new Random();
+        int x = rand.nextInt(SIZE);
+        int y = rand.nextInt(SIZE);
+        int direction = rand.nextInt((4 - 1) + 1) + 1;
 
+        // will build a ship north
+        if (direction == 1 && (y - 3) >= 0) {
+            grid[x][y] = ship.BATTLESHIP.getSymbol();
+            grid[x][y - 1] = ship.BATTLESHIP.getSymbol();
+            grid[x][y - 2] = ship.BATTLESHIP.getSymbol();
+            grid[x][y - 3] = ship.BATTLESHIP.getSymbol();
+            placed = true;
+
+        //will build a ship south
+        } else if (direction == 2 && (y + 3) < SIZE) {
+            grid[x][y] = ship.BATTLESHIP.getSymbol();
+            grid[x][y + 1] = ship.BATTLESHIP.getSymbol();
+            grid[x][y + 2] = ship.BATTLESHIP.getSymbol();
+            grid[x][y + 3] = ship.BATTLESHIP.getSymbol();
+            placed = true;
+
+        //will build a ship west
+        } else if (direction == 3 && (x - 3) >= 0) {
+            grid[x][y] = ship.BATTLESHIP.getSymbol();
+            grid[x - 1][y] = ship.BATTLESHIP.getSymbol();
+            grid[x - 2][y] = ship.BATTLESHIP.getSymbol();
+            grid[x - 3][y] = ship.BATTLESHIP.getSymbol();
+            placed = true;
+
+        //will build a ship east
+        } else if (direction == 4 && (x + 3) < SIZE) {
+            grid[x][y] = ship.BATTLESHIP.getSymbol();
+            grid[x + 1][y] = ship.BATTLESHIP.getSymbol();
+            grid[x + 2][y] = ship.BATTLESHIP.getSymbol();
+            grid[x + 3][y] = ship.BATTLESHIP.getSymbol();
+            placed = true;
+        }
+        return placed;
+    }
+
+    private boolean placeSubmarine() {
+        boolean placed = false;
+        Random rand = new Random();
+        int x = rand.nextInt(SIZE);
+        int y = rand.nextInt(SIZE);
+        int direction = rand.nextInt((4 - 1) + 1) + 1;
+
+        // will build a ship north
+        if (direction == 1 && (y - 2) >= 0) {
+            grid[x][y] = ship.SUBMARINE.getSymbol();
+            grid[x][y - 1] = ship.SUBMARINE.getSymbol();
+            grid[x][y - 2] = ship.SUBMARINE.getSymbol();
+            placed = true;
+
+            //will build a ship south
+        } else if (direction == 2 && (y + 2) < SIZE) {
+            grid[x][y] = ship.SUBMARINE.getSymbol();
+            grid[x][y + 1] = ship.SUBMARINE.getSymbol();
+            grid[x][y + 2] = ship.SUBMARINE.getSymbol();
+            placed = true;
+
+            //will build a ship west
+        } else if (direction == 3 && (x - 2) >= 0) {
+            grid[x][y] = ship.SUBMARINE.getSymbol();
+            grid[x - 1][y] = ship.SUBMARINE.getSymbol();
+            grid[x - 2][y] = ship.SUBMARINE.getSymbol();
+            placed = true;
+
+            //will build a ship east
+        } else if (direction == 4 && (x + 2) < SIZE) {
+            grid[x][y] = ship.SUBMARINE.getSymbol();
+            grid[x + 1][y] = ship.SUBMARINE.getSymbol();
+            grid[x + 2][y] = ship.SUBMARINE.getSymbol();
+            placed = true;
+        }
+        return placed;
+    }
 
     public String displayOwnerGrid() {
         String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";
