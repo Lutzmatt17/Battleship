@@ -18,8 +18,9 @@ public class Grid {
     public String displayOwnerGrid() {
         String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";
         StringBuilder build = new StringBuilder();
+        build.append(" ");
         for(int i = 0; i < this.grid.length; i++) {
-            build.append("\t");
+            build.append("   ");
             build.append(i);
         }
         build.append("\n");
@@ -41,8 +42,9 @@ public class Grid {
     public String displayRivalGrid() {
         String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";
         StringBuilder build = new StringBuilder();
+        build.append(" ");
         for(int i = 0; i < this.grid.length; i++) {
-            build.append("\t");
+            build.append("   ");
             build.append(i);
         }
         build.append("\n");
