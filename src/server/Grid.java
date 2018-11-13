@@ -21,23 +21,38 @@ public class Grid {
         int x = rand.nextInt(SIZE);
         int y = rand.nextInt(SIZE);
         int direction = rand.nextInt((4 - 1) + 1) + 1;
-        grid[x][y] = ship.CARRIER.getSymbol();
-        if (direction == 1) {
+        for(int i = 0; i < SIZE; i++){
+            for(int j = 0; j < SIZE; j++){
+                grid[i][j] = " ";
+            }
+        }
+
+        //will build a ship north
+
+        if (direction == 1 && (y - 4) >= 0) {
+                grid[x][y] = ship.CARRIER.getSymbol();
+                grid[x][y - 1] = ship.CARRIER.getSymbol();
+                grid[x][y - 2] = ship.CARRIER.getSymbol();
+                grid[x][y - 3] = ship.CARRIER.getSymbol();
+                grid[x][y - 4] = ship.CARRIER.getSymbol();
+
+            //will build a ship south
+        } else if (direction == 2 && (y + 4) < SIZE) {
+            grid[x][y] = ship.CARRIER.getSymbol();
             grid[x][y + 1] = ship.CARRIER.getSymbol();
             grid[x][y + 2] = ship.CARRIER.getSymbol();
             grid[x][y + 3] = ship.CARRIER.getSymbol();
             grid[x][y + 4] = ship.CARRIER.getSymbol();
-        } else if (direction == 2) {
-            grid[x][y - 1] = ship.CARRIER.getSymbol();
-            grid[x][y - 2] = ship.CARRIER.getSymbol();
-            grid[x][y - 3] = ship.CARRIER.getSymbol();
-            grid[x][y - 4] = ship.CARRIER.getSymbol();
-        } else if (direction == 3) {
+            //will build a ship west
+        } else if (direction == 3 && (x - 4) >= 0) {
+            grid[x][y] = ship.CARRIER.getSymbol();
             grid[x - 1][y] = ship.CARRIER.getSymbol();
             grid[x - 2][y] = ship.CARRIER.getSymbol();
             grid[x - 3][y] = ship.CARRIER.getSymbol();
             grid[x - 4][y] = ship.CARRIER.getSymbol();
-        } else if (direction == 4) {
+            //will build a ship east
+        } else if (direction == 4 && (x + 4) < SIZE) {
+            grid[x][y] = ship.CARRIER.getSymbol();
             grid[x + 1][y] = ship.CARRIER.getSymbol();
             grid[x + 2][y] = ship.CARRIER.getSymbol();
             grid[x + 3][y] = ship.CARRIER.getSymbol();
