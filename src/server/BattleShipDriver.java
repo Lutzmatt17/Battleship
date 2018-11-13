@@ -5,6 +5,7 @@ public class BattleShipDriver {
         Grid grid = new Grid();
         grid.makeGrid();
         System.out.println(grid.displayOwnerGrid());
+        System.out.println();
         System.out.println(grid.displayRivalGrid());
     }
 }

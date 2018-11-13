@@ -2,11 +2,7 @@ package server;
 
 public class Grid {
     private String[][] grid;
-    private static final String BATTLESHIP = "B";
-    private static final String CARRIER = "C";
-    private static final String SUBMARINE = "S";
-    private static final String CRUISER = "R";
-    private static final String DESTROYER = "D";
+    private Ship ship;
     private static final String HIT = "@";
     private static final String MISS = "X";
     private static final int SIZE = 10;
@@ -56,7 +52,12 @@ public class Grid {
             build.append(row);
             for(int col = 0; col < this.grid[row].length; col++) {
                 build.append(" | ");
-                //todo
+                String check = grid[row][col];
+                if(check.equals(MISS) || check.equals(HIT)) {
+                    build.append(check);
+                } else {
+                    build.append(" ");
+                }
             }
             build.append(" |");
             build.append("\n");
