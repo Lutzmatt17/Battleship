@@ -32,8 +32,7 @@ public class Grid {
                 build.append(" | ");
                 build.append(grid[row][col]);
             }
-            build.append(" |");
-            build.append("\n");
+            build.append(" |\n");
             build.append(sepLine);
         }
         return build.toString();
@@ -61,8 +60,7 @@ public class Grid {
                     build.append(" ");
                 }
             }
-            build.append(" |");
-            build.append("\n");
+            build.append(" |\n");
             build.append(sepLine);
         }
         return build.toString();
