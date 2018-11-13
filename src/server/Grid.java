@@ -151,7 +151,85 @@ public class Grid {
 
 
 
+    private boolean placeBattleship() {
+        boolean placed = false;
+        Random rand = new Random();
+        int x = rand.nextInt(SIZE);
+        int y = rand.nextInt(SIZE);
+        int direction = rand.nextInt((4 - 1) + 1) + 1;
 
+        // will build a ship north
+        if (direction == 1 && (y - 3) >= 0) {
+            grid[x][y] = ship.BATTLESHIP.getSymbol();
+            grid[x][y - 1] = ship.BATTLESHIP.getSymbol();
+            grid[x][y - 2] = ship.BATTLESHIP.getSymbol();
+            grid[x][y - 3] = ship.BATTLESHIP.getSymbol();
+            placed = true;
+
+        //will build a ship south
+        } else if (direction == 2 && (y + 3) < SIZE) {
+            grid[x][y] = ship.BATTLESHIP.getSymbol();
+            grid[x][y + 1] = ship.BATTLESHIP.getSymbol();
+            grid[x][y + 2] = ship.BATTLESHIP.getSymbol();
+            grid[x][y + 3] = ship.BATTLESHIP.getSymbol();
+            placed = true;
+
+        //will build a ship west
+        } else if (direction == 3 && (x - 3) >= 0) {
+            grid[x][y] = ship.BATTLESHIP.getSymbol();
+            grid[x - 1][y] = ship.BATTLESHIP.getSymbol();
+            grid[x - 2][y] = ship.BATTLESHIP.getSymbol();
+            grid[x - 3][y] = ship.BATTLESHIP.getSymbol();
+            placed = true;
+
+        //will build a ship east
+        } else if (direction == 4 && (x + 3) < SIZE) {
+            grid[x][y] = ship.BATTLESHIP.getSymbol();
+            grid[x + 1][y] = ship.BATTLESHIP.getSymbol();
+            grid[x + 2][y] = ship.BATTLESHIP.getSymbol();
+            grid[x + 3][y] = ship.BATTLESHIP.getSymbol();
+            placed = true;
+        }
+        return placed;
+    }
+
+    private boolean placeSubmarine() {
+        boolean placed = false;
+        Random rand = new Random();
+        int x = rand.nextInt(SIZE);
+        int y = rand.nextInt(SIZE);
+        int direction = rand.nextInt((4 - 1) + 1) + 1;
+
+        // will build a ship north
+        if (direction == 1 && (y - 2) >= 0) {
+            grid[x][y] = ship.SUBMARINE.getSymbol();
+            grid[x][y - 1] = ship.SUBMARINE.getSymbol();
+            grid[x][y - 2] = ship.SUBMARINE.getSymbol();
+            placed = true;
+
+            //will build a ship south
+        } else if (direction == 2 && (y + 2) < SIZE) {
+            grid[x][y] = ship.SUBMARINE.getSymbol();
+            grid[x][y + 1] = ship.SUBMARINE.getSymbol();
+            grid[x][y + 2] = ship.SUBMARINE.getSymbol();
+            placed = true;
+
+            //will build a ship west
+        } else if (direction == 3 && (x - 2) >= 0) {
+            grid[x][y] = ship.SUBMARINE.getSymbol();
+            grid[x - 1][y] = ship.SUBMARINE.getSymbol();
+            grid[x - 2][y] = ship.SUBMARINE.getSymbol();
+            placed = true;
+
+            //will build a ship east
+        } else if (direction == 4 && (x + 2) < SIZE) {
+            grid[x][y] = ship.SUBMARINE.getSymbol();
+            grid[x + 1][y] = ship.SUBMARINE.getSymbol();
+            grid[x + 2][y] = ship.SUBMARINE.getSymbol();
+            placed = true;
+        }
+        return placed;
+    }
 
     public String displayOwnerGrid() {
         String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";
@@ -170,8 +248,7 @@ public class Grid {
                 build.append(" | ");
                 build.append(grid[row][col]);
             }
-            build.append(" |");
-            build.append("\n");
+            build.append(" |\n");
             build.append(sepLine);
         }
         return build.toString();
@@ -199,8 +276,7 @@ public class Grid {
                     build.append(" ");
                 }
             }
-            build.append(" |");
-            build.append("\n");
+            build.append(" |\n");
             build.append(sepLine);
         }
         return build.toString();
