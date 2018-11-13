@@ -33,7 +33,6 @@ public class Grid {
             build.append(row);
             for(int col = 0; col < this.grid[row].length; col++) {
                 build.append(" | ");
-                //todo check if it is our player or not
                 build.append(grid[row][col]);
             }
             build.append(" |");
@@ -57,8 +56,7 @@ public class Grid {
             build.append(row);
             for(int col = 0; col < this.grid[row].length; col++) {
                 build.append(" | ");
-                //todo check if it is our player or not
-                build.append(grid[row][col]);
+                //todo
             }
             build.append(" |");
             build.append("\n");
