@@ -13,21 +13,47 @@ public class Grid {
 
     public Grid(){
         this.grid = new String[SIZE][SIZE];
-    }
-
-    public void makeGrid() {
         for(int i = 0; i < SIZE; i++){
             for(int j = 0; j < SIZE; j++){
                 grid[i][j] = " ";
             }
         }
+    }
 
+    public void makeGrid() {
         placeBattleship();
         placeCarrier();
         placeCruiser();
         placeSubmarine();
         placeDestroyer();
+    }
 
+    public void updateGrid(String[][] grid){
+        this.grid = grid;
+    }
+
+    public String[][] getGrid(){
+        return grid;
+    }
+
+    /**
+     * Method that tries to hit a ship on the specified opponents grid based off of the specified x or y coordinates
+     * @param oppGrid - Opponents grid
+     * @param x - x coordianate of attack
+     * @param y - y coordinate of attack
+     * @return true or false depending on whether the attack was a hit or not
+     */
+    public boolean tryHit(String[][] oppGrid, int x, int y){
+        boolean result = false;
+        if(oppGrid[x][y].equals("B") || oppGrid[x][y].equals("C") ||
+                oppGrid[x][y].equals("D") || oppGrid[x][y].equals("R") || oppGrid[x][y].equals("S")){
+            oppGrid[x][y] = HIT;
+            result = true;
+        }else{
+            oppGrid[x][y] = MISS;
+        }
+        updateGrid(oppGrid);
+        return result;
     }
 
     public boolean placeCarrier() {
