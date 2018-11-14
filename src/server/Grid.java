@@ -21,11 +21,48 @@ public class Grid {
     }
 
     public void makeGrid() {
-        placeBattleship();
-        placeCarrier();
-        placeCruiser();
-        placeSubmarine();
-        placeDestroyer();
+        boolean result = false;
+        /*
+        while(!result){
+            if(placeCarrier() && placeBattleship() && placeCruiser() && placeSubmarine() && placeDestroyer()){
+                result = true;
+            }
+        }
+        */
+        while(!result){
+            if(noCollision()) {
+                result = placeCarrier();
+            }
+        }
+
+        result = false;
+        while(!result){
+            if(noCollision()) {
+                result = placeBattleship();
+            }
+        }
+
+        result = false;
+        while(!result){
+            if(noCollision()) {
+                result = placeCruiser();
+            }
+        }
+
+        result = false;
+        while(!result){
+            if(noCollision()) {
+                result = placeSubmarine();
+            }
+        }
+
+        result = false;
+        while(!result){
+            if(noCollision()) {
+                result = placeDestroyer();
+            }
+        }
+
     }
 
     public void updateGrid(String[][] grid){
@@ -34,6 +71,10 @@ public class Grid {
 
     public String[][] getGrid(){
         return grid;
+    }
+
+    public boolean noCollision(){
+        return true;
     }
 
     /**
@@ -62,7 +103,7 @@ public class Grid {
         int x = rand.nextInt(SIZE);
         int y = rand.nextInt(SIZE);
         int direction = rand.nextInt((4 - 1) + 1) + 1;
-        //will build a ship north
+        //will build a ship south
         if (direction == 1 && (y - 4) >= 0) {
             grid[x][y] = ship.CARRIER.getSymbol();
             grid[x][y - 1] = ship.CARRIER.getSymbol();
@@ -71,7 +112,7 @@ public class Grid {
             grid[x][y - 4] = ship.CARRIER.getSymbol();
             result = true;
 
-            //will build a ship south
+            //will build a ship north
         } else if (direction == 2 && (y + 4) < SIZE) {
             grid[x][y] = ship.CARRIER.getSymbol();
             grid[x][y + 1] = ship.CARRIER.getSymbol();
