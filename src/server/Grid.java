@@ -21,12 +21,14 @@ public class Grid {
                 grid[i][j] = " ";
             }
         }
-
-        placeBattleship();
-        placeCarrier();
-        placeCruiser();
-        placeSubmarine();
-        placeDestroyer();
+        boolean allPlaced = false;
+        while(!allPlaced) {
+            placeBattleship();
+            placeCarrier();
+            placeCruiser();
+            placeSubmarine();
+            placeDestroyer();
+        }
 
     }
 
