@@ -8,28 +8,101 @@ public class Grid {
 
     private static final String HIT = "@";
     private static final String MISS = "X";
-
     private static final int SIZE = 10;
 
     public Grid(){
         this.grid = new String[SIZE][SIZE];
-    }
-
-    public void makeGrid() {
         for(int i = 0; i < SIZE; i++){
             for(int j = 0; j < SIZE; j++){
                 grid[i][j] = " ";
             }
         }
-        boolean allPlaced = false;
-        while(!allPlaced) {
-            placeBattleship();
-            placeCarrier();
-            placeCruiser();
-            placeSubmarine();
-            placeDestroyer();
+    }
+
+    public Grid(int size){
+        this.grid = new String[size][size];
+        for(int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++){
+                grid[i][j] = " ";
+            }
+        }
+    }
+
+    public void makeGrid() {
+        boolean result = false;
+        /*
+        while(!result){
+            if(placeCarrier() && placeBattleship() && placeCruiser() && placeSubmarine() && placeDestroyer()){
+                result = true;
+            }
+        }
+        */
+        while(!result){
+            if(noCollision()) {
+                result = placeCarrier();
+            }
         }
 
+        result = false;
+        while(!result){
+            if(noCollision()) {
+                result = placeBattleship();
+            }
+        }
+
+        result = false;
+        while(!result){
+            if(noCollision()) {
+                result = placeCruiser();
+            }
+        }
+
+        result = false;
+        while(!result){
+            if(noCollision()) {
+                result = placeSubmarine();
+            }
+        }
+
+        result = false;
+        while(!result){
+            if(noCollision()) {
+                result = placeDestroyer();
+            }
+        }
+
+    }
+
+    public void updateGrid(String[][] grid){
+        this.grid = grid;
+    }
+
+    public String[][] getGrid(){
+        return grid;
+    }
+
+    public boolean noCollision(){
+        return true;
+    }
+
+    /**
+     * Method that tries to hit a ship on the specified opponents grid based off of the specified x or y coordinates
+     * @param oppGrid - Opponents grid
+     * @param x - x coordianate of attack
+     * @param y - y coordinate of attack
+     * @return true or false depending on whether the attack was a hit or not
+     */
+    public boolean tryHit(String[][] oppGrid, int x, int y){
+        boolean result = false;
+        if(oppGrid[x][y].equals("B") || oppGrid[x][y].equals("C") ||
+                oppGrid[x][y].equals("D") || oppGrid[x][y].equals("R") || oppGrid[x][y].equals("S")){
+            oppGrid[x][y] = HIT;
+            result = true;
+        }else{
+            oppGrid[x][y] = MISS;
+        }
+        updateGrid(oppGrid);
+        return result;
     }
 
     public boolean placeCarrier() {
@@ -38,7 +111,7 @@ public class Grid {
         int x = rand.nextInt(SIZE);
         int y = rand.nextInt(SIZE);
         int direction = rand.nextInt((4 - 1) + 1) + 1;
-        //will build a ship north
+        //will build a ship south
         if (direction == 1 && (y - 4) >= 0) {
             grid[x][y] = ship.CARRIER.getSymbol();
             grid[x][y - 1] = ship.CARRIER.getSymbol();
@@ -47,7 +120,7 @@ public class Grid {
             grid[x][y - 4] = ship.CARRIER.getSymbol();
             result = true;
 
-            //will build a ship south
+            //will build a ship north
         } else if (direction == 2 && (y + 4) < SIZE) {
             grid[x][y] = ship.CARRIER.getSymbol();
             grid[x][y + 1] = ship.CARRIER.getSymbol();
@@ -236,20 +309,30 @@ public class Grid {
     }
 
     public String displayOwnerGrid() {
-        String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";
+        //String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";'
+        String sepLine =  String.format("%5s" , "      +---");
+        String sepLine2 = "+---";
         StringBuilder build = new StringBuilder();
-        build.append(" ");
+        build.append("     ");
         for(int i = 0; i < this.grid.length; i++) {
             build.append("   ");
             build.append(i);
         }
+
+        for(int i = 0; i < this.grid.length - 1; i++){
+            sepLine += sepLine2;
+            if(i == this.grid.length - 2){
+                sepLine += "+";
+            }
+        }
+
         build.append("\n");
         build.append(sepLine);
         for(int row = 0; row < this.grid.length; row++) {
             build.append("\n");
-            build.append(row);
+            build.append(String.format("%5s", row));
             for(int col = 0; col < this.grid[row].length; col++) {
-                build.append(" | ");
+                build.append(String.format("%3s"," | "));
                 build.append(grid[row][col]);
             }
             build.append(" |\n");
@@ -259,20 +342,29 @@ public class Grid {
     }
 
     public String displayRivalGrid() {
-        String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";
+        //String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";
+        String sepLine =  String.format("%5s" , "      +---");
+        String sepLine2 = "+---";
         StringBuilder build = new StringBuilder();
-        build.append(" ");
+        build.append("     ");
         for(int i = 0; i < this.grid.length; i++) {
             build.append("   ");
             build.append(i);
+        }
+
+        for(int i = 0; i < this.grid.length - 1; i++){
+            sepLine += sepLine2;
+            if(i == this.grid.length - 2){
+                sepLine += "+";
+            }
         }
         build.append("\n");
         build.append(sepLine);
         for(int row = 0; row < this.grid.length; row++) {
             build.append("\n");
-            build.append(row);
+            build.append(String.format("%5s", row));
             for(int col = 0; col < this.grid[row].length; col++) {
-                build.append(" | ");
+                build.append(String.format("%3s"," | "));
                 String check = grid[row][col];
                 if(check.equals(MISS) || check.equals(HIT)) {
                     build.append(check);
