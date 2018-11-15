@@ -8,13 +8,21 @@ public class Grid {
 
     private static final String HIT = "@";
     private static final String MISS = "X";
-
     private static final int SIZE = 10;
 
     public Grid(){
         this.grid = new String[SIZE][SIZE];
         for(int i = 0; i < SIZE; i++){
             for(int j = 0; j < SIZE; j++){
+                grid[i][j] = " ";
+            }
+        }
+    }
+
+    public Grid(int size){
+        this.grid = new String[size][size];
+        for(int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++){
                 grid[i][j] = " ";
             }
         }
@@ -301,20 +309,30 @@ public class Grid {
     }
 
     public String displayOwnerGrid() {
-        String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";
+        //String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";'
+        String sepLine =  String.format("%5s" , "      +---");
+        String sepLine2 = "+---";
         StringBuilder build = new StringBuilder();
-        build.append(" ");
+        build.append("     ");
         for(int i = 0; i < this.grid.length; i++) {
             build.append("   ");
             build.append(i);
         }
+
+        for(int i = 0; i < this.grid.length - 1; i++){
+            sepLine += sepLine2;
+            if(i == this.grid.length - 2){
+                sepLine += "+";
+            }
+        }
+
         build.append("\n");
         build.append(sepLine);
         for(int row = 0; row < this.grid.length; row++) {
             build.append("\n");
-            build.append(row);
+            build.append(String.format("%5s", row));
             for(int col = 0; col < this.grid[row].length; col++) {
-                build.append(" | ");
+                build.append(String.format("%3s"," | "));
                 build.append(grid[row][col]);
             }
             build.append(" |\n");
@@ -324,20 +342,29 @@ public class Grid {
     }
 
     public String displayRivalGrid() {
-        String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";
+        //String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";
+        String sepLine =  String.format("%5s" , "      +---");
+        String sepLine2 = "+---";
         StringBuilder build = new StringBuilder();
-        build.append(" ");
+        build.append("     ");
         for(int i = 0; i < this.grid.length; i++) {
             build.append("   ");
             build.append(i);
+        }
+
+        for(int i = 0; i < this.grid.length - 1; i++){
+            sepLine += sepLine2;
+            if(i == this.grid.length - 2){
+                sepLine += "+";
+            }
         }
         build.append("\n");
         build.append(sepLine);
         for(int row = 0; row < this.grid.length; row++) {
             build.append("\n");
-            build.append(row);
+            build.append(String.format("%5s", row));
             for(int col = 0; col < this.grid[row].length; col++) {
-                build.append(" | ");
+                build.append(String.format("%3s"," | "));
                 String check = grid[row][col];
                 if(check.equals(MISS) || check.equals(HIT)) {
                     build.append(check);
