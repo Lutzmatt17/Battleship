@@ -17,10 +17,11 @@ public class Grid {
             makeGrid(size);
         } else {
             System.out.println("Minimum grid size is 5");
+            System.exit(1);
         }
     }
 
-    public void makeGrid(int size) {
+    private void makeGrid(int size) {
         this.grid = new String[size][size];
         for(int i = 0; i < size; i++){
             for(int j = 0; j < size; j++){
@@ -62,7 +63,7 @@ public class Grid {
         return result;
     }
 
-    public void placeCarrier() {
+    private void placeCarrier() {
         Random rand = new Random();
         boolean placed = false;
         while(!placed) {
@@ -74,7 +75,7 @@ public class Grid {
         }
     }
 
-    public void placeDestroyer() {
+    private void placeDestroyer() {
         Random rand = new Random();
         boolean placed = false;
         while(!placed) {
@@ -86,7 +87,7 @@ public class Grid {
         }
     }
 
-    public void placeCruiser() {
+    private void placeCruiser() {
         Random rand = new Random();
         boolean placed = false;
         while(!placed) {

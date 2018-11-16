@@ -1,18 +1,32 @@
 package server;
 
-public class Game {
-    private Grid grid;
+import java.util.HashMap;
 
+public class Game {
+    private HashMap<String, Grid> players;
+    private int gridSize;
 
     public Game(){
-        grid = new Grid();
+        players = new HashMap<>();
+        gridSize = 0;
     }
 
-    public Grid getGrid() {
-        return grid;
+    public boolean addPlayer(String name, int gridSize) {
+        boolean added = false;
+        if(players.isEmpty()) {
+            players.put(name, new Grid(gridSize));
+            this.gridSize = gridSize;
+            added = true;
+        } else {
+            if(!players.containsKey(name)) {
+                players.put(name, new Grid(this.gridSize));
+                added = true;
+            }
+        }
+        return added;
     }
 
-    public void setGrid(Grid grid) {
-        this.grid = grid;
+    public boolean play() {
+        return true;
     }
 }

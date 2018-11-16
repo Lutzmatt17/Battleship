@@ -17,7 +17,7 @@ public class BattleShipDriver {
         System.out.println(grid2.displayOwnerGrid());
         System.out.println(grid2.displayRivalGrid());
 
-        Grid grid3 = new Grid(20);
+        Grid grid3 = new Grid(100);
         System.out.println(grid3.displayOwnerGrid());
         System.out.println(grid3.displayRivalGrid());
 
