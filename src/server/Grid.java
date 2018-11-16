@@ -3,17 +3,50 @@ package server;
 import java.util.Random;
 
 public class Grid {
+
+    /** Default symbol for a hit. */
     private static final String HIT = "@";
+
+    /** Default symbol for a miss. */
     private static final String MISS = "X";
+
+    /** Default size for a grid. */
     private static final int SIZE = 10;
+
+    /** Minimum size for a grid. */
+    private static final int MIN_SIZE = 5;
+
+    /** Used to randomly generate directions. */
+    private static final int DIRECTION = 4;
+
+    /** Used to randomly generate directions. */
+    private static final int NORTH = 0;
+
+    /** Used to randomly generate directions. */
+    private static final int SOUTH = 1;
+
+    /** Used to randomly generate directions. */
+    private static final int EAST = 2;
+
+    /** Used to randomly generate directions. */
+    private static final int WEST = 3;
+
+    /** 2D string array that represents a player's grid. */
     private String[][] grid;
 
+    /**
+     * Creates a grid of a default size.
+     */
     public Grid(){
         this(SIZE);
     }
 
+    /**
+     * Creates a grid of a specified size.
+     * @param size The specified size to create
+     */
     public Grid(int size){
-        if(size >= 5) {
+        if(size >= MIN_SIZE) {
             makeGrid(size);
         } else {
             System.out.println("Minimum grid size is 5");
@@ -21,6 +54,10 @@ public class Grid {
         }
     }
 
+    /**
+     * Initializes the grid and places all the ships.
+     * @param size A specified size to make the 2D array.
+     */
     private void makeGrid(int size) {
         this.grid = new String[size][size];
         for(int i = 0; i < size; i++){
@@ -35,10 +72,18 @@ public class Grid {
         placeDestroyer();
     }
 
+    /**
+     * Updates the grid based on a passed in grid.
+     * @param grid The specified grid to update it to.
+     */
     public void updateGrid(String[][] grid){
         this.grid = grid;
     }
 
+    /**
+     * Returns the 2D array representing our grid.
+     * @return The 2D array representing our grid.
+     */
     public String[][] getGrid(){
         return grid;
     }
@@ -52,8 +97,11 @@ public class Grid {
      */
     public boolean tryHit(String[][] oppGrid, int row, int col){
         boolean result = false;
-        if(oppGrid[row][col].equals("B") || oppGrid[row][col].equals("C") ||
-                oppGrid[row][col].equals("D") || oppGrid[row][col].equals("R") || oppGrid[row][col].equals("S")){
+        if(oppGrid[row][col].equals(Ship.BATTLESHIP.getSymbol()) ||
+                oppGrid[row][col].equals(Ship.CARRIER.getSymbol()) ||
+                oppGrid[row][col].equals(Ship.SUBMARINE.getSymbol()) ||
+                oppGrid[row][col].equals(Ship.CRUISER.getSymbol()) ||
+                oppGrid[row][col].equals(Ship.DESTROYER.getSymbol())){
             oppGrid[row][col] = HIT;
             result = true;
         }else{
@@ -63,94 +111,113 @@ public class Grid {
         return result;
     }
 
+    /**
+     * Places a Carrier based on a random location and direction.
+     */
     private void placeCarrier() {
         Random rand = new Random();
         boolean placed = false;
         while(!placed) {
             int row = rand.nextInt(grid.length);
             int col = rand.nextInt(grid.length);
-            int direction = rand.nextInt(4);
+            int direction = rand.nextInt(DIRECTION);
 
             placed = placeShip(Ship.CARRIER, row, col, direction);
         }
     }
 
+    /**
+     * Places a Destroyer based on a random location and direction.
+     */
     private void placeDestroyer() {
         Random rand = new Random();
         boolean placed = false;
         while(!placed) {
             int row = rand.nextInt(grid.length);
             int col = rand.nextInt(grid.length);
-            int direction = rand.nextInt(4);
+            int direction = rand.nextInt(DIRECTION);
 
             placed = placeShip(Ship.DESTROYER, row, col, direction);
         }
     }
 
+    /**
+     * Places a Cruiser based on a random location and direction.
+     */
     private void placeCruiser() {
         Random rand = new Random();
         boolean placed = false;
         while(!placed) {
             int row = rand.nextInt(grid.length);
             int col = rand.nextInt(grid.length);
-            int direction = rand.nextInt(4);
+            int direction = rand.nextInt(DIRECTION);
 
             placed = placeShip(Ship.CRUISER, row, col, direction);
         }
     }
 
+    /**
+     * Places a Battleship based on a random location and direction.
+     */
     private void placeBattleship() {
         Random rand = new Random();
         boolean placed = false;
         while(!placed) {
             int row = rand.nextInt(grid.length);
             int col = rand.nextInt(grid.length);
-            int direction = rand.nextInt(4);
+            int direction = rand.nextInt(DIRECTION);
 
             placed = placeShip(Ship.BATTLESHIP, row, col, direction);
         }
     }
 
+    /**
+     * Places a Submarine based on a random location and direction.
+     */
     private void placeSubmarine() {
         Random rand = new Random();
         boolean placed = false;
         while(!placed) {
             int row = rand.nextInt(grid.length);
             int col = rand.nextInt(grid.length);
-            int direction = rand.nextInt(4);
+            int direction = rand.nextInt(DIRECTION);
 
             placed = placeShip(Ship.SUBMARINE, row, col, direction);
         }
     }
 
+    /**
+     * Places a specified ship based on a row, column, and direction.
+     * @param ship The specified ship.
+     * @param row The specified row to start placing the ship.
+     * @param col The specified column to start placing the ship.
+     * @param direction The specified direction to start building the ship.
+     * @return True if the ship was placed, false otherwise.
+     */
     private boolean placeShip(Ship ship, int row, int col, int direction) {
         boolean placed = false;
-        // Building north
-        if (direction == 0 &&
+        if (direction == NORTH &&
                 noCollision(row, col, direction, ship.getSize())) {
 
             for (int i = 0; i < ship.getSize(); i++) {
                 grid[row][col--] = ship.getSymbol();
             }
             placed = true;
-            // Building south
-        } else if (direction == 1 &&
+        } else if (direction == SOUTH &&
                 noCollision(row, col, direction, ship.getSize())) {
 
             for (int i = 0; i < ship.getSize(); i++) {
                 grid[row][col++] = ship.getSymbol();
             }
             placed = true;
-            // Building east
-        } else if (direction == 2 &&
+        } else if (direction == EAST &&
                 noCollision(row, col, direction, ship.getSize())) {
 
             for (int i = 0; i < ship.getSize(); i++) {
                 grid[row++][col] = ship.getSymbol();
             }
             placed = true;
-            // Building west
-        } else if (direction == 3 &&
+        } else if (direction == WEST &&
                 noCollision(row, col, direction, ship.getSize())) {
 
             for (int i = 0; i < ship.getSize(); i++) {
@@ -161,31 +228,40 @@ public class Grid {
         return placed;
     }
 
+    /**
+     * Checks that the ship we're trying to place does not collide with any
+     * other ships or the walls of the grid.
+     * @param row The row to start placing our ship.
+     * @param col The column to start placing our ship.
+     * @param direction The direction in which we place our ship.
+     * @param size The size of the ship we are placing.
+     * @return True if their are no collisions, false otherwise.
+     */
     private boolean noCollision(int row, int col, int direction, int size) {
         int i = 0;
         boolean rowInBound = true;
         boolean colInBound = true;
         while (rowInBound && colInBound && grid[row][col].equals(" ") && i < size) {
             switch (direction) {
-                case 0:
+                case NORTH:
                     col--;
                     if(col < 0) {
                         colInBound = false;
                     }
                     break;
-                case 1:
+                case SOUTH:
                     col++;
                     if(col >= grid.length) {
                         colInBound = false;
                     }
                     break;
-                case 2:
+                case EAST:
                     row++;
                     if(row >= grid.length) {
                         rowInBound = false;
                     }
                     break;
-                case 3:
+                case WEST:
                     row--;
                     if(row < 0) {
                         rowInBound = false;
@@ -197,6 +273,9 @@ public class Grid {
         return i == size;
     }
 
+    /**
+     * Outputs the owner's grid to the console.
+     */
     public void displayOwnerGrid() {
         StringBuilder builder = new StringBuilder();
         String rowSep = "";
@@ -220,6 +299,9 @@ public class Grid {
         System.out.println(builder.toString());
     }
 
+    /**
+     * Outputs an opponent's grid to the console.
+     */
     public void displayRivalGrid() {
         StringBuilder builder = new StringBuilder();
         String rowSep = "";

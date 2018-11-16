@@ -11,8 +11,8 @@ public class BattleShipDriver {
             for(int j = 0; j < testGrid.getGrid().length; j++) {
                 System.out.println(String.format("Hitting %d x %d", i, j));
                 testGrid.tryHit(testGrid.getGrid(), i, j);
-                testGrid.displayOwnerGrid();
-                testGrid.displayRivalGrid();
+                //testGrid.displayOwnerGrid();
+                //testGrid.displayRivalGrid();
             }
         }
         testGrid.displayOwnerGrid();
