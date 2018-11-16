@@ -197,7 +197,7 @@ public class Grid {
         return i == size;
     }
 
-    public String displayOwnerGrid() {
+    public void displayOwnerGrid() {
         StringBuilder builder = new StringBuilder();
         String rowSep = "";
         String colSep = " | ";
@@ -217,10 +217,10 @@ public class Grid {
             }
             builder.append(String.format("%s\n%5s%s", colSep, "+", rowSep));
         }
-        return builder.toString();
+        System.out.println(builder.toString());
     }
 
-    public String displayRivalGrid() {
+    public void displayRivalGrid() {
         StringBuilder builder = new StringBuilder();
         String rowSep = "";
         String colSep = " | ";
@@ -245,6 +245,6 @@ public class Grid {
             }
             builder.append(String.format("%s\n%5s%s", colSep, "+", rowSep));
         }
-        return builder.toString();
+        System.out.println(builder.toString());
     }
 }

@@ -11,6 +11,14 @@ public class Game {
         gridSize = 0;
     }
 
+    public HashMap<String, Grid> getPlayers() {
+        return players;
+    }
+
+    public int getGridSize() {
+        return gridSize;
+    }
+
     public boolean addPlayer(String name, int gridSize) {
         boolean added = false;
         if(players.isEmpty()) {
@@ -24,9 +32,5 @@ public class Game {
             }
         }
         return added;
-    }
-
-    public boolean play() {
-        return true;
     }
 }
