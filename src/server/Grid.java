@@ -3,74 +3,35 @@ package server;
 import java.util.Random;
 
 public class Grid {
-    private String[][] grid;
-    private Ship ship;
-
     private static final String HIT = "@";
     private static final String MISS = "X";
     private static final int SIZE = 10;
+    private String[][] grid;
 
     public Grid(){
-        this.grid = new String[SIZE][SIZE];
-        for(int i = 0; i < SIZE; i++){
-            for(int j = 0; j < SIZE; j++){
-                grid[i][j] = " ";
-            }
-        }
+        this(SIZE);
     }
 
     public Grid(int size){
+        if(size >= 5) {
+            makeGrid(size);
+        } else {
+            System.out.println("Minimum grid size is 5");
+        }
+    }
+
+    public void makeGrid(int size) {
         this.grid = new String[size][size];
         for(int i = 0; i < size; i++){
             for(int j = 0; j < size; j++){
                 grid[i][j] = " ";
             }
         }
-    }
-
-    public void makeGrid() {
-        boolean result = false;
-        /*
-        while(!result){
-            if(placeCarrier() && placeBattleship() && placeCruiser() && placeSubmarine() && placeDestroyer()){
-                result = true;
-            }
-        }
-        */
-        while(!result){
-            if(noCollision()) {
-                result = placeCarrier();
-            }
-        }
-
-        result = false;
-        while(!result){
-            if(noCollision()) {
-                result = placeBattleship();
-            }
-        }
-
-        result = false;
-        while(!result){
-            if(noCollision()) {
-                result = placeCruiser();
-            }
-        }
-
-        result = false;
-        while(!result){
-            if(noCollision()) {
-                result = placeSubmarine();
-            }
-        }
-
-        result = false;
-        while(!result){
-            if(noCollision()) {
-                result = placeDestroyer();
-            }
-        }
-
+        placeCarrier();
+        placeBattleship();
+        placeCruiser();
+        placeSubmarine();
+        placeDestroyer();
     }
 
     public void updateGrid(String[][] grid){
@@ -81,300 +42,208 @@ public class Grid {
         return grid;
     }
 
-    public boolean noCollision(){
-        return true;
-    }
-
     /**
-     * Method that tries to hit a ship on the specified opponents grid based off of the specified x or y coordinates
+     * Method that tries to hit a ship on the specified opponents grid based off of the specified row or col coordinates
      * @param oppGrid - Opponents grid
-     * @param x - x coordianate of attack
-     * @param y - y coordinate of attack
+     * @param row - x coordinate of attack
+     * @param col - y coordinate of attack
      * @return true or false depending on whether the attack was a hit or not
      */
-    public boolean tryHit(String[][] oppGrid, int x, int y){
+    public boolean tryHit(String[][] oppGrid, int row, int col){
         boolean result = false;
-        if(oppGrid[x][y].equals("B") || oppGrid[x][y].equals("C") ||
-                oppGrid[x][y].equals("D") || oppGrid[x][y].equals("R") || oppGrid[x][y].equals("S")){
-            oppGrid[x][y] = HIT;
+        if(oppGrid[row][col].equals("B") || oppGrid[row][col].equals("C") ||
+                oppGrid[row][col].equals("D") || oppGrid[row][col].equals("R") || oppGrid[row][col].equals("S")){
+            oppGrid[row][col] = HIT;
             result = true;
         }else{
-            oppGrid[x][y] = MISS;
+            oppGrid[row][col] = MISS;
         }
         updateGrid(oppGrid);
         return result;
     }
 
-    public boolean placeCarrier() {
-        boolean result = false;
+    public void placeCarrier() {
         Random rand = new Random();
-        int x = rand.nextInt(SIZE);
-        int y = rand.nextInt(SIZE);
-        int direction = rand.nextInt((4 - 1) + 1) + 1;
-        //will build a ship south
-        if (direction == 1 && (y - 4) >= 0) {
-            grid[x][y] = ship.CARRIER.getSymbol();
-            grid[x][y - 1] = ship.CARRIER.getSymbol();
-            grid[x][y - 2] = ship.CARRIER.getSymbol();
-            grid[x][y - 3] = ship.CARRIER.getSymbol();
-            grid[x][y - 4] = ship.CARRIER.getSymbol();
-            result = true;
-
-            //will build a ship north
-        } else if (direction == 2 && (y + 4) < SIZE) {
-            grid[x][y] = ship.CARRIER.getSymbol();
-            grid[x][y + 1] = ship.CARRIER.getSymbol();
-            grid[x][y + 2] = ship.CARRIER.getSymbol();
-            grid[x][y + 3] = ship.CARRIER.getSymbol();
-            grid[x][y + 4] = ship.CARRIER.getSymbol();
-            result = true;
-            //will build a ship west
-        } else if (direction == 3 && (x - 4) >= 0) {
-            grid[x][y] = ship.CARRIER.getSymbol();
-            grid[x - 1][y] = ship.CARRIER.getSymbol();
-            grid[x - 2][y] = ship.CARRIER.getSymbol();
-            grid[x - 3][y] = ship.CARRIER.getSymbol();
-            grid[x - 4][y] = ship.CARRIER.getSymbol();
-            result = true;
-            //will build a ship east
-        } else if (direction == 4 && (x + 4) < SIZE) {
-            grid[x][y] = ship.CARRIER.getSymbol();
-            grid[x + 1][y] = ship.CARRIER.getSymbol();
-            grid[x + 2][y] = ship.CARRIER.getSymbol();
-            grid[x + 3][y] = ship.CARRIER.getSymbol();
-            grid[x + 4][y] = ship.CARRIER.getSymbol();
-            result = true;
-        }
-
-        return result;
-    }
-
-    public boolean placeDestroyer() {
-        boolean result = false;
-        Random rand = new Random();
-        int x = rand.nextInt(SIZE);
-        int y = rand.nextInt(SIZE);
-        int direction = rand.nextInt((4 - 1) + 1) + 1;
-        //will build a ship north
-        if (direction == 1 && (y - 1) >= 0) {
-            grid[x][y] = ship.DESTROYER.getSymbol();
-            grid[x][y - 1] = ship.DESTROYER.getSymbol();
-
-            result = true;
-
-            //will build a ship south
-        } else if (direction == 2 && (y + 1) < SIZE) {
-            grid[x][y] = ship.DESTROYER.getSymbol();
-            grid[x][y + 1] = ship.DESTROYER.getSymbol();
-
-            result = true;
-            //will build a ship west
-        } else if (direction == 3 && (x - 1) >= 0) {
-            grid[x][y] = ship.DESTROYER.getSymbol();
-            grid[x - 1][y] = ship.DESTROYER.getSymbol();
-
-            result = true;
-            //will build a ship east
-        } else if (direction == 4 && (x + 1) < SIZE) {
-            grid[x][y] = ship.DESTROYER.getSymbol();
-            grid[x + 1][y] = ship.DESTROYER.getSymbol();
-
-            result = true;
-        }
-
-        return result;
-    }
-
-    public boolean placeCruiser() {
-        boolean result = false;
-        Random rand = new Random();
-        int x = rand.nextInt(SIZE);
-        int y = rand.nextInt(SIZE);
-        int direction = rand.nextInt((4 - 1) + 1) + 1;
-        //will build a ship north
-        if (direction == 1 && (y - 2) >= 0) {
-            grid[x][y] = ship.CRUISER.getSymbol();
-            grid[x][y - 1] = ship.CRUISER.getSymbol();
-            grid[x][y - 2] = ship.CRUISER.getSymbol();
-
-            result = true;
-
-            //will build a ship south
-        } else if (direction == 2 && (y + 2) < SIZE) {
-            grid[x][y] = ship.CRUISER.getSymbol();
-            grid[x][y + 1] = ship.CRUISER.getSymbol();
-            grid[x][y + 2] = ship.CRUISER.getSymbol();
-
-
-            result = true;
-            //will build a ship west
-        } else if (direction == 3 && (x - 2) >= 0) {
-            grid[x][y] = ship.CRUISER.getSymbol();
-            grid[x - 1][y] = ship.CRUISER.getSymbol();
-            grid[x - 2][y] = ship.CRUISER.getSymbol();
-
-            result = true;
-            //will build a ship east
-        } else if (direction == 4 && (x + 2) < SIZE) {
-            grid[x][y] = ship.CRUISER.getSymbol();
-            grid[x + 1][y] = ship.CRUISER.getSymbol();
-            grid[x + 2][y] = ship.CRUISER.getSymbol();
-
-            result = true;
-        }
-
-        return result;
-    }
-
-
-
-    private boolean placeBattleship() {
         boolean placed = false;
+        while(!placed) {
+            int row = rand.nextInt(grid.length);
+            int col = rand.nextInt(grid.length);
+            int direction = rand.nextInt(4);
+
+            placed = placeShip(Ship.CARRIER, row, col, direction);
+        }
+    }
+
+    public void placeDestroyer() {
         Random rand = new Random();
-        int x = rand.nextInt(SIZE);
-        int y = rand.nextInt(SIZE);
-        int direction = rand.nextInt((4 - 1) + 1) + 1;
+        boolean placed = false;
+        while(!placed) {
+            int row = rand.nextInt(grid.length);
+            int col = rand.nextInt(grid.length);
+            int direction = rand.nextInt(4);
 
-        // will build a ship north
-        if (direction == 1 && (y - 3) >= 0) {
-            grid[x][y] = ship.BATTLESHIP.getSymbol();
-            grid[x][y - 1] = ship.BATTLESHIP.getSymbol();
-            grid[x][y - 2] = ship.BATTLESHIP.getSymbol();
-            grid[x][y - 3] = ship.BATTLESHIP.getSymbol();
+            placed = placeShip(Ship.DESTROYER, row, col, direction);
+        }
+    }
+
+    public void placeCruiser() {
+        Random rand = new Random();
+        boolean placed = false;
+        while(!placed) {
+            int row = rand.nextInt(grid.length);
+            int col = rand.nextInt(grid.length);
+            int direction = rand.nextInt(4);
+
+            placed = placeShip(Ship.CRUISER, row, col, direction);
+        }
+    }
+
+    private void placeBattleship() {
+        Random rand = new Random();
+        boolean placed = false;
+        while(!placed) {
+            int row = rand.nextInt(grid.length);
+            int col = rand.nextInt(grid.length);
+            int direction = rand.nextInt(4);
+
+            placed = placeShip(Ship.BATTLESHIP, row, col, direction);
+        }
+    }
+
+    private void placeSubmarine() {
+        Random rand = new Random();
+        boolean placed = false;
+        while(!placed) {
+            int row = rand.nextInt(grid.length);
+            int col = rand.nextInt(grid.length);
+            int direction = rand.nextInt(4);
+
+            placed = placeShip(Ship.SUBMARINE, row, col, direction);
+        }
+    }
+
+    private boolean placeShip(Ship ship, int row, int col, int direction) {
+        boolean placed = false;
+        // Building north
+        if (direction == 0 &&
+                noCollision(row, col, direction, ship.getSize())) {
+
+            for (int i = 0; i < ship.getSize(); i++) {
+                grid[row][col--] = ship.getSymbol();
+            }
             placed = true;
+            // Building south
+        } else if (direction == 1 &&
+                noCollision(row, col, direction, ship.getSize())) {
 
-        //will build a ship south
-        } else if (direction == 2 && (y + 3) < SIZE) {
-            grid[x][y] = ship.BATTLESHIP.getSymbol();
-            grid[x][y + 1] = ship.BATTLESHIP.getSymbol();
-            grid[x][y + 2] = ship.BATTLESHIP.getSymbol();
-            grid[x][y + 3] = ship.BATTLESHIP.getSymbol();
+            for (int i = 0; i < ship.getSize(); i++) {
+                grid[row][col++] = ship.getSymbol();
+            }
             placed = true;
+            // Building east
+        } else if (direction == 2 &&
+                noCollision(row, col, direction, ship.getSize())) {
 
-        //will build a ship west
-        } else if (direction == 3 && (x - 3) >= 0) {
-            grid[x][y] = ship.BATTLESHIP.getSymbol();
-            grid[x - 1][y] = ship.BATTLESHIP.getSymbol();
-            grid[x - 2][y] = ship.BATTLESHIP.getSymbol();
-            grid[x - 3][y] = ship.BATTLESHIP.getSymbol();
+            for (int i = 0; i < ship.getSize(); i++) {
+                grid[row++][col] = ship.getSymbol();
+            }
             placed = true;
+            // Building west
+        } else if (direction == 3 &&
+                noCollision(row, col, direction, ship.getSize())) {
 
-        //will build a ship east
-        } else if (direction == 4 && (x + 3) < SIZE) {
-            grid[x][y] = ship.BATTLESHIP.getSymbol();
-            grid[x + 1][y] = ship.BATTLESHIP.getSymbol();
-            grid[x + 2][y] = ship.BATTLESHIP.getSymbol();
-            grid[x + 3][y] = ship.BATTLESHIP.getSymbol();
+            for (int i = 0; i < ship.getSize(); i++) {
+                grid[row--][col] = ship.getSymbol();
+            }
             placed = true;
         }
         return placed;
     }
 
-    private boolean placeSubmarine() {
-        boolean placed = false;
-        Random rand = new Random();
-        int x = rand.nextInt(SIZE);
-        int y = rand.nextInt(SIZE);
-        int direction = rand.nextInt((4 - 1) + 1) + 1;
-
-        // will build a ship north
-        if (direction == 1 && (y - 2) >= 0) {
-            grid[x][y] = ship.SUBMARINE.getSymbol();
-            grid[x][y - 1] = ship.SUBMARINE.getSymbol();
-            grid[x][y - 2] = ship.SUBMARINE.getSymbol();
-            placed = true;
-
-            //will build a ship south
-        } else if (direction == 2 && (y + 2) < SIZE) {
-            grid[x][y] = ship.SUBMARINE.getSymbol();
-            grid[x][y + 1] = ship.SUBMARINE.getSymbol();
-            grid[x][y + 2] = ship.SUBMARINE.getSymbol();
-            placed = true;
-
-            //will build a ship west
-        } else if (direction == 3 && (x - 2) >= 0) {
-            grid[x][y] = ship.SUBMARINE.getSymbol();
-            grid[x - 1][y] = ship.SUBMARINE.getSymbol();
-            grid[x - 2][y] = ship.SUBMARINE.getSymbol();
-            placed = true;
-
-            //will build a ship east
-        } else if (direction == 4 && (x + 2) < SIZE) {
-            grid[x][y] = ship.SUBMARINE.getSymbol();
-            grid[x + 1][y] = ship.SUBMARINE.getSymbol();
-            grid[x + 2][y] = ship.SUBMARINE.getSymbol();
-            placed = true;
+    private boolean noCollision(int row, int col, int direction, int size) {
+        int i = 0;
+        boolean rowInBound = true;
+        boolean colInBound = true;
+        while (rowInBound && colInBound && grid[row][col].equals(" ") && i < size) {
+            switch (direction) {
+                case 0:
+                    col--;
+                    if(col < 0) {
+                        colInBound = false;
+                    }
+                    break;
+                case 1:
+                    col++;
+                    if(col >= grid.length) {
+                        colInBound = false;
+                    }
+                    break;
+                case 2:
+                    row++;
+                    if(row >= grid.length) {
+                        rowInBound = false;
+                    }
+                    break;
+                case 3:
+                    row--;
+                    if(row < 0) {
+                        rowInBound = false;
+                    }
+                    break;
+            }
+            i++;
         }
-        return placed;
+        return i == size;
     }
 
     public String displayOwnerGrid() {
-        //String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";'
-        String sepLine =  String.format("%5s" , "      +---");
-        String sepLine2 = "+---";
-        StringBuilder build = new StringBuilder();
-        build.append("     ");
-        for(int i = 0; i < this.grid.length; i++) {
-            build.append("   ");
-            build.append(i);
-        }
-
-        for(int i = 0; i < this.grid.length - 1; i++){
-            sepLine += sepLine2;
-            if(i == this.grid.length - 2){
-                sepLine += "+";
+        StringBuilder builder = new StringBuilder();
+        String rowSep = "";
+        String colSep = " | ";
+        for(int i = 0; i < grid.length; i++) {
+            if(i == 0) {
+                builder.append(String.format("\n%7d", i));
+            } else {
+                builder.append(String.format("%4d", i));
             }
+            rowSep += "---+";
         }
-
-        build.append("\n");
-        build.append(sepLine);
-        for(int row = 0; row < this.grid.length; row++) {
-            build.append("\n");
-            build.append(String.format("%5s", row));
-            for(int col = 0; col < this.grid[row].length; col++) {
-                build.append(String.format("%3s"," | "));
-                build.append(grid[row][col]);
+        builder.append(String.format("\n%5s%s", "+", rowSep));
+        for(int j = 0; j < grid.length; j++) {
+            builder.append(String.format("\n%3d", j));
+            for(int sep = 0; sep < grid.length; sep++) {
+                builder.append(String.format("%s%s", colSep, grid[j][sep]));
             }
-            build.append(" |\n");
-            build.append(sepLine);
+            builder.append(String.format("%s\n%5s%s", colSep, "+", rowSep));
         }
-        return build.toString();
+        return builder.toString();
     }
 
     public String displayRivalGrid() {
-        //String sepLine = "  +---+---+---+---+---+---+---+---+---+---+";
-        String sepLine =  String.format("%5s" , "      +---");
-        String sepLine2 = "+---";
-        StringBuilder build = new StringBuilder();
-        build.append("     ");
-        for(int i = 0; i < this.grid.length; i++) {
-            build.append("   ");
-            build.append(i);
-        }
-
-        for(int i = 0; i < this.grid.length - 1; i++){
-            sepLine += sepLine2;
-            if(i == this.grid.length - 2){
-                sepLine += "+";
+        StringBuilder builder = new StringBuilder();
+        String rowSep = "";
+        String colSep = " | ";
+        for(int i = 0; i < grid.length; i++) {
+            if(i == 0) {
+                builder.append(String.format("\n%7d", i));
+            } else {
+                builder.append(String.format("%4d", i));
             }
+            rowSep += "---+";
         }
-        build.append("\n");
-        build.append(sepLine);
-        for(int row = 0; row < this.grid.length; row++) {
-            build.append("\n");
-            build.append(String.format("%5s", row));
-            for(int col = 0; col < this.grid[row].length; col++) {
-                build.append(String.format("%3s"," | "));
-                String check = grid[row][col];
-                if(check.equals(MISS) || check.equals(HIT)) {
-                    build.append(check);
+        builder.append(String.format("\n%5s%s", "+", rowSep));
+        for(int j = 0; j < grid.length; j++) {
+            builder.append(String.format("\n%3d", j));
+            for(int sep = 0; sep < grid.length; sep++) {
+                String check = grid[j][sep];
+                if(check.equals(HIT) || check.equals(MISS)) {
+                    builder.append(String.format("%s%s", colSep, check));
                 } else {
-                    build.append(" ");
+                    builder.append(String.format("%s%s", colSep, " "));
                 }
             }
-            build.append(" |\n");
-            build.append(sepLine);
+            builder.append(String.format("%s\n%5s%s", colSep, "+", rowSep));
         }
-        return build.toString();
+        return builder.toString();
     }
 }
