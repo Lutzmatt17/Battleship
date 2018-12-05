@@ -2,6 +2,7 @@ package server;
 
 public class BattleShipDriver {
 
+    /** Offline demo version
     public static void main(String[] args) {
         Grid testGrid = new Grid(5);
         testGrid.displayOwnerGrid();
@@ -17,5 +18,20 @@ public class BattleShipDriver {
         }
         testGrid.displayOwnerGrid();
         testGrid.displayRivalGrid();
+    }
+     */
+
+    public static void main(String[] args) {
+        BattleServer server;
+        switch (args.length) {
+            case 2:
+                break;
+            case 1:
+                break;
+            default:
+                System.out.println("Usage: java .server.BattleShipDriver <port> " +
+                        "[board size]");
+                System.exit(1);
+        }
     }
 }
