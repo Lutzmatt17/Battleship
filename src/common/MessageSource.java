@@ -10,7 +10,7 @@ import java.util.List;
  *
  * <b> The two concepts have been decoupled from one another:
  * Meaning that classes that are the source of message must implement the MessageSource interface 
- * classes that want to be notified must implment MessageListener. </b>
+ * classes that want to be notified must implement MessageListener. </b>
  *
  * @author Dr. William Kreahling
  * @version November 2017

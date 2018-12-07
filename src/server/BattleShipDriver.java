@@ -22,16 +22,25 @@ public class BattleShipDriver {
      */
 
     public static void main(String[] args) {
-        BattleServer server;
+        BattleServer server = null;
         switch (args.length) {
             case 2:
+                server = new BattleServer(Integer.parseInt(args[0]),
+                        Integer.parseInt(args[1]));
                 break;
             case 1:
+                server = new BattleServer(Integer.parseInt(args[0]));
                 break;
             default:
                 System.out.println("Usage: java .server.BattleShipDriver <port> " +
                         "[board size]");
                 System.exit(1);
         }
+        try {
+            server.listen();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 }
