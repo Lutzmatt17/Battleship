@@ -274,7 +274,6 @@ public class Grid {
             }
             builder.append(String.format("%s\r\n%5s%s", colSep, "+", rowSep));
         }
-        System.out.println(builder.toString());
         return builder.toString();
     }
 

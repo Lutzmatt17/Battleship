@@ -97,6 +97,8 @@ public class BattleServer implements MessageListener {
         Integer row = Integer.parseInt(command[2]);
         Integer col = Integer.parseInt(command[3]);
         game.tryHit(game.getPlayerGrids().get(toAttack).getGrid(), row, col);
+        broadcast(String.format("Shots fired at %s by %s", command[1],
+                command[4]));
     }
 
     private void quitReceived(String message, MessageSource source) {
@@ -115,7 +117,7 @@ public class BattleServer implements MessageListener {
         command = message.split(" ");
         String toShow = command[1];
         String username = command[2];
-        broadcast(game.display(toShow, username));
+        ((ConnectionAgent) source).sendMessages(game.display(toShow, username));
     }
 
     @Override
@@ -125,16 +127,30 @@ public class BattleServer implements MessageListener {
         } else if(message.contains("/play") && !gameInProgress) {
             playReceived(message, source);
             gameInProgress = true;
-        } else if(gameInProgress) {
             broadcast(String.format("%s it is your turn", usernames.get(current)));
-            if(message.contains(usernames.get(current))) {
+        } else if(gameInProgress) {
+            boolean turnOver = false;
+            if (message.contains(usernames.get(current))) {
                 if (message.contains("/attack")) {
                     attackReceived(message, source);
+                    turnOver = true;
                 } else if (message.contains("/quit")) {
                     quitReceived(message, source);
+                    turnOver = true;
                 } else if (message.contains("/show")) {
                     showReceived(message, source);
                 }
+            }
+            if(turnOver) {
+                if(usernames.size() == 1) {
+                    ((ConnectionAgent) source).sendMessages(
+                            "Congratulations, you have won!");
+                }
+                current++;
+                if(current >= usernames.size()) {
+                    current = 0;
+                }
+                broadcast(String.format("%s it is your turn", usernames.get(current)));
             }
         } else if(message.contains("/attack") || message.contains("/quit") ||
                     message.contains("/show")){
