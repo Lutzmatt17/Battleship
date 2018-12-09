@@ -24,7 +24,13 @@ public class ConnectionAgent extends MessageSource implements Runnable {
     }
 
     public void sendMessages(String message) {
+
+        //System.out.printf("connection agent -> connection agent: %s\r\n",
+        //        message);
+
         out.print(message);
+
+        //System.out.println("sending completed");
     }
 
     public boolean isConnected() {
@@ -48,6 +54,9 @@ public class ConnectionAgent extends MessageSource implements Runnable {
     public void run() {
         while(isConnected()) {
             String command = in.nextLine();
+
+            //System.out.printf("to listeners: %s\r\n", command);
+
             notifyReceipt(command);
             if(command.contains("/quit")) {
                 this.close();

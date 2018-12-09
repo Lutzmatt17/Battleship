@@ -24,12 +24,14 @@ public class BattleClient extends MessageSource implements MessageListener {
         this.addMessageListener(
                 new PrintStreamMessageListener(System.out));
         connect();
+        this.send("/join");
     }
 
     public void connect() {
         try {
             agent = new ConnectionAgent(new Socket(this.host, this.port));
             this.agent.addMessageListener(this);
+            this.send("");
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
@@ -40,11 +42,17 @@ public class BattleClient extends MessageSource implements MessageListener {
      * @param message The input from the user.
      */
     public void send(String message) {
-        this.agent.sendMessages(message + this.username);
+
+        //System.out.printf("client -> connection agent: %s\r\n", message);
+
+        this.agent.sendMessages(message + " " + this.username + "\r\n");
     }
 
     @Override
     public void messageReceived(String message, MessageSource source) {
+
+        //System.out.printf("client -> listeners: %s\r\n", message);
+
         this.notifyReceipt(message);
     }
 

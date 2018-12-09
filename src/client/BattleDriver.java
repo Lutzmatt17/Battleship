@@ -13,9 +13,13 @@ public class BattleDriver {
             while(!quit) {
                 String command = input.nextLine();
                 if(command.toLowerCase().equals("/quit")) {
+                    //System.out.println("got a quit in driver");
                     quit = true;
                     input.close();
                 }
+
+                //System.out.printf("Command to send: %s\r\n", command);
+
                 client.send(command);
             }
         } else {
