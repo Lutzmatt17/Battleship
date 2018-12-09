@@ -80,6 +80,7 @@ public class BattleServer implements MessageListener {
             for(String player : players.keySet()) {
                 System.out.println(player + " " + players.get(player));
             }
+            game.getPlayerGrids().put(command[1], new Grid());
         } else if(message.contains("/play")) {
 
             //System.out.println("message contains a play");
@@ -97,6 +98,7 @@ public class BattleServer implements MessageListener {
             String toAttack = command[1];
             Integer row = Integer.parseInt(command[2]);
             Integer col = Integer.parseInt(command[3]);
+            game.tryHit(game.getPlayerGrids().get(toAttack).getGrid(), row, col);
         } else if(message.contains("/quit")) {
             command = message.split(" ");
             broadcast("!!! " + command[1] + " surrendered.");
@@ -117,6 +119,7 @@ public class BattleServer implements MessageListener {
             command = message.split(" ");
             String toShow = command[1];
             String username = command[2];
+            game.display(toShow, username);
         }
     }
 
