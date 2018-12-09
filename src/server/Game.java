@@ -29,7 +29,7 @@ public class Game {
      * @param col - y coordinate of attack
      * @return true or false depending on whether the attack was a hit or not
      */
-    public boolean tryHit(String[][] oppGrid, int row, int col){
+    public boolean tryHit(String player, String[][] oppGrid, int row, int col){
         boolean result = false;
         if(oppGrid[row][col].equals(Ship.BATTLESHIP.getSymbol()) ||
                 oppGrid[row][col].equals(Ship.CARRIER.getSymbol()) ||
@@ -42,7 +42,7 @@ public class Game {
             oppGrid[row][col] = MISS;
         }
 
-        grid.setGrid(oppGrid);
+        grid.setGrid(playerGrids.get(player).getGrid());
         return result;
     }
 
@@ -62,5 +62,9 @@ public class Game {
 
     public HashMap<String, Grid> getPlayerGrids() {
         return playerGrids;
+    }
+
+    public void removePlayer(String player){
+        playerGrids.remove(player);
     }
 }
