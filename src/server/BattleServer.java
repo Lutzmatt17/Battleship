@@ -38,11 +38,13 @@ public class BattleServer implements MessageListener {
                 connection = serverSocket.accept();
                 Runnable agent = new ConnectionAgent(connection);
 
-                agent.run();
-
             } catch (Exception e) {
-                connection.close();
-                e.printStackTrace();
+                try {
+                    connection.close();
+                    e.printStackTrace();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
             }
         }
     }
@@ -56,6 +58,9 @@ public class BattleServer implements MessageListener {
     @Override
     public void messageReceived(String message, MessageSource source) {
         String[] command;
+
+        System.out.printf("got %s\n", message);
+
         if(message.contains("/join")) {
             command = message.split(" ");
             players.put(command[1], (ConnectionAgent) source);
@@ -67,7 +72,9 @@ public class BattleServer implements MessageListener {
             }
         } else if(message.contains("/attack")) {
             command = message.split(" ");
-
+            String toAttack = command[1];
+            Integer row = Integer.parseInt(command[2]);
+            Integer col = Integer.parseInt(command[3]);
         } else if(message.contains("/quit")) {
 
             // Under the hood, a client's username will be sent after a quit
@@ -79,7 +86,8 @@ public class BattleServer implements MessageListener {
             broadcast("!!! " + command[1] + " surrendered.");
         } else if(message.contains("/show")) {
             command = message.split(" ");
-
+            String toShow = command[1];
+            String username = command[2];
         }
     }
 

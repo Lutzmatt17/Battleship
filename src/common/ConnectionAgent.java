@@ -46,6 +46,12 @@ public class ConnectionAgent extends MessageSource implements Runnable {
 
     @Override
     public void run() {
-        //todo call notifyReceipt in here
+        while(isConnected()) {
+            String command = in.nextLine();
+            notifyReceipt(command);
+            if(command.contains("/quit")) {
+                this.close();
+            }
+        }
     }
 }
