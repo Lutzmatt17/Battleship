@@ -77,9 +77,6 @@ public class BattleServer implements MessageListener {
 
             command = message.split(" ");
             players.put(command[1], (ConnectionAgent) source);
-            for(String player : players.keySet()) {
-                System.out.println(player + " " + players.get(player));
-            }
             game.getPlayerGrids().put(command[1], new Grid());
         } else if(message.contains("/play")) {
 
