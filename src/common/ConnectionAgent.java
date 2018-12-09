@@ -53,13 +53,15 @@ public class ConnectionAgent extends MessageSource implements Runnable {
     @Override
     public void run() {
         while(isConnected()) {
-            String command = in.nextLine();
+            if(!socket.isClosed()) {
+                String command = in.nextLine();
 
-            //System.out.printf("to listeners: %s\r\n", command);
+                //System.out.printf("to listeners: %s\r\n", command);
 
-            notifyReceipt(command);
-            if(command.contains("/quit")) {
-                this.close();
+                notifyReceipt(command);
+                if (command.contains("/quit")) {
+                    this.close();
+                }
             }
         }
     }
