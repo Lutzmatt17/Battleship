@@ -6,13 +6,14 @@ import common.MessageSource;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.HashMap;
 
 public class BattleServer implements MessageListener {
     private ServerSocket serverSocket;
     private int current;
     private Game game;
-    ConnectionAgent agent;
+    //ConnectionAgent agent;
     private HashMap<String, ConnectionAgent> players;
 
     public BattleServer(int port) {
@@ -26,13 +27,23 @@ public class BattleServer implements MessageListener {
             this.current = 0;
             this.players = new HashMap<>();
         } catch (IOException ioe) {
-            System.out.println(ioe.getMessage());
+            ioe.printStackTrace();
         }
     }
 
     public void listen() {
-        while(!serverSocket.isClosed()) {
+        while (!serverSocket.isClosed()) {
+            Socket connection = null;
+            try {
+                connection = serverSocket.accept();
+                Runnable agent = new ConnectionAgent(connection);
 
+                agent.run();
+
+            } catch (Exception e) {
+                connection.close();
+                e.printStackTrace();
+            }
         }
     }
 
@@ -47,8 +58,7 @@ public class BattleServer implements MessageListener {
         String[] command;
         if(message.contains("/join")) {
             command = message.split(" ");
-            players.put(command[1], );
-            source.addMessageListener(this);
+            players.put(command[1], (ConnectionAgent) source);
         } else if(message.contains("/play")) {
             if(players.size() < 2) {
                 broadcast("Not enough players to play the game.");
@@ -75,6 +85,6 @@ public class BattleServer implements MessageListener {
 
     @Override
     public void sourceClosed(MessageSource source) {
-
+        source.removeMessageListener(this);
     }
 }

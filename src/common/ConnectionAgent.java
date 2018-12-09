@@ -46,13 +46,6 @@ public class ConnectionAgent extends MessageSource implements Runnable {
 
     @Override
     public void run() {
-        try {
-            while() {
-                notifyReceipt();
-                Thread.sleep(500);
-            }
-        } catch(InterruptedException ie) {
-            //TODO
-        }
+        //todo call notifyReceipt in here
     }
 }
