@@ -254,47 +254,48 @@ public class Grid {
     /**
      * Outputs the owner's grid to the console.
      */
-    public void displayOwnerGrid() {
+    public String displayOwnerGrid() {
         StringBuilder builder = new StringBuilder();
         String rowSep = "";
         String colSep = " | ";
         for(int i = 0; i < grid.length; i++) {
             if(i == 0) {
-                builder.append(String.format("\n%7d", i));
+                builder.append(String.format("\r\n%7d", i));
             } else {
                 builder.append(String.format("%4d", i));
             }
             rowSep += "---+";
         }
-        builder.append(String.format("\n%5s%s", "+", rowSep));
+        builder.append(String.format("\r\n%5s%s", "+", rowSep));
         for(int j = 0; j < grid.length; j++) {
-            builder.append(String.format("\n%3d", j));
+            builder.append(String.format("\r\n%3d", j));
             for(int sep = 0; sep < grid.length; sep++) {
                 builder.append(String.format("%s%s", colSep, grid[j][sep]));
             }
-            builder.append(String.format("%s\n%5s%s", colSep, "+", rowSep));
+            builder.append(String.format("%s\r\n%5s%s", colSep, "+", rowSep));
         }
         System.out.println(builder.toString());
+        return builder.toString();
     }
 
     /**
      * Outputs an opponent's grid to the console.
      */
-    public void displayRivalGrid() {
+    public String displayRivalGrid() {
         StringBuilder builder = new StringBuilder();
         String rowSep = "";
         String colSep = " | ";
         for(int i = 0; i < grid.length; i++) {
             if(i == 0) {
-                builder.append(String.format("\n%7d", i));
+                builder.append(String.format("\r\n%7d", i));
             } else {
                 builder.append(String.format("%4d", i));
             }
             rowSep += "---+";
         }
-        builder.append(String.format("\n%5s%s", "+", rowSep));
+        builder.append(String.format("\r\n%5s%s", "+", rowSep));
         for(int j = 0; j < grid.length; j++) {
-            builder.append(String.format("\n%3d", j));
+            builder.append(String.format("\r\n%3d", j));
             for(int sep = 0; sep < grid.length; sep++) {
                 String check = grid[j][sep];
                 if(check.equals(HIT) || check.equals(MISS)) {
@@ -303,8 +304,8 @@ public class Grid {
                     builder.append(String.format("%s%s", colSep, " "));
                 }
             }
-            builder.append(String.format("%s\n%5s%s", colSep, "+", rowSep));
+            builder.append(String.format("%s\r\n%5s%s", colSep, "+", rowSep));
         }
-        System.out.println(builder.toString());
+       return builder.toString();
     }
 }

@@ -13,7 +13,7 @@ public class PrintStreamMessageListener implements MessageListener {
 
     @Override
     public void messageReceived(String message, MessageSource source) {
-        out.print(message);
+        out.print(message + "\r\n");
     }
 
     @Override

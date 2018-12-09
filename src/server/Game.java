@@ -48,11 +48,11 @@ public class Game {
 
 
 
-    public void display(String toShow, String userName){
-        if(toShow == userName){
-            grid.displayOwnerGrid();
+    public String display(String toShow, String userName){
+        if(toShow.equals(userName)){
+            return grid.displayOwnerGrid();
         }else{
-            grid.displayRivalGrid();
+            return grid.displayRivalGrid();
         }
     }
 

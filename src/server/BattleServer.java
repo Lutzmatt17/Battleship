@@ -7,13 +7,15 @@ import common.MessageSource;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BattleServer implements MessageListener {
     private ServerSocket serverSocket;
     private int current;
     private Game game;
-    //ConnectionAgent agent;
+    private boolean gameInProgress;
+    private ArrayList<String> usernames;
     private HashMap<String, ConnectionAgent> players;
 
     public BattleServer(int port) {
@@ -24,7 +26,9 @@ public class BattleServer implements MessageListener {
         try {
             this.serverSocket = new ServerSocket(port);
             this.game = new Game(size);
+            this.gameInProgress = false;
             this.current = 0;
+            this.usernames = new ArrayList<>();
             this.players = new HashMap<>();
         } catch (IOException ioe) {
             ioe.printStackTrace();
@@ -65,58 +69,76 @@ public class BattleServer implements MessageListener {
         }
     }
 
-    @Override
-    public void messageReceived(String message, MessageSource source) {
+    private void joinReceived(String message, MessageSource source) {
         String[] command;
 
-        //System.out.printf("server -> game: %s\r\n", message);
+        command = message.split(" ");
+        players.put(command[1], (ConnectionAgent) source);
+        usernames.add(command[1]);
+        game.getPlayerGrids().put(command[1], new Grid());
+        broadcast(String.format("!!! %s has joined", command[1]));
+    }
 
+    private void playReceived(String message, MessageSource source) {
+        String[] command;
+
+        if(players.size() < 2) {
+            broadcast("Not enough players to play the game.");
+        } else {
+            broadcast("The game begins.");
+        }
+    }
+
+    private void attackReceived(String message, MessageSource source) {
+        String[] command;
+
+        command = message.split(" ");
+        String toAttack = command[1];
+        Integer row = Integer.parseInt(command[2]);
+        Integer col = Integer.parseInt(command[3]);
+        game.tryHit(game.getPlayerGrids().get(toAttack).getGrid(), row, col);
+    }
+
+    private void quitReceived(String message, MessageSource source) {
+        String[] command;
+
+        command = message.split(" ");
+        broadcast("!!! " + command[1] + " surrendered.");
+        source.removeMessageListener(this);
+        sourceClosed(players.get(command[1]));
+        players.remove(command[1]);
+    }
+
+    private void showReceived(String message, MessageSource source) {
+        String[] command;
+
+        command = message.split(" ");
+        String toShow = command[1];
+        String username = command[2];
+        broadcast(game.display(toShow, username));
+    }
+
+    @Override
+    public void messageReceived(String message, MessageSource source) {
         if(message.contains("/join")) {
-
-            //System.out.println("message contains a join");
-
-            command = message.split(" ");
-            players.put(command[1], (ConnectionAgent) source);
-            game.getPlayerGrids().put(command[1], new Grid());
-        } else if(message.contains("/play")) {
-
-            //System.out.println("message contains a play");
-
-            if(players.size() < 2) {
-                broadcast("Not enough players to play the game.");
-            } else {
-                broadcast("The game begins. duh duh duhhhhhh");
+            joinReceived(message, source);
+        } else if(message.contains("/play") && !gameInProgress) {
+            playReceived(message, source);
+            gameInProgress = true;
+        } else if(gameInProgress) {
+            broadcast(String.format("%s it is your turn", usernames.get(current)));
+            if(message.contains(usernames.get(current))) {
+                if (message.contains("/attack")) {
+                    attackReceived(message, source);
+                } else if (message.contains("/quit")) {
+                    quitReceived(message, source);
+                } else if (message.contains("/show")) {
+                    showReceived(message, source);
+                }
             }
-        } else if(message.contains("/attack")) {
-
-            //System.out.println("message contains an attack");
-
-            command = message.split(" ");
-            String toAttack = command[1];
-            Integer row = Integer.parseInt(command[2]);
-            Integer col = Integer.parseInt(command[3]);
-            game.tryHit(game.getPlayerGrids().get(toAttack).getGrid(), row, col);
-        } else if(message.contains("/quit")) {
-            command = message.split(" ");
-            broadcast("!!! " + command[1] + " surrendered.");
-
-            // Under the hood, a client's username will be sent after a quit
-            // command.
-            //System.out.println("before rmMsgListener");
-            source.removeMessageListener(this);
-            //System.out.println("before srcClosed");
-            sourceClosed(players.get(command[1]));
-            //System.out.println("before rm");
-            players.remove(command[1]);
-            //System.out.println("after rm");
-        } else if(message.contains("/show")) {
-
-            //System.out.println("message contains a show");
-
-            command = message.split(" ");
-            String toShow = command[1];
-            String username = command[2];
-            game.display(toShow, username);
+        } else if(message.contains("/attack") || message.contains("/quit") ||
+                    message.contains("/show")){
+            broadcast("Game not in progress.");
         }
     }
 
