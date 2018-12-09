@@ -64,6 +64,7 @@ public class BattleServer implements MessageListener {
         if(message.contains("/join")) {
             command = message.split(" ");
             players.put(command[1], (ConnectionAgent) source);
+            game.getPlayerGrids().put(command[1], new Grid());
         } else if(message.contains("/play")) {
             if(players.size() < 2) {
                 broadcast("Not enough players to play the game.");
@@ -75,6 +76,7 @@ public class BattleServer implements MessageListener {
             String toAttack = command[1];
             Integer row = Integer.parseInt(command[2]);
             Integer col = Integer.parseInt(command[3]);
+            game.tryHit(game.getPlayerGrids().get(toAttack).getGrid(), row, col);
         } else if(message.contains("/quit")) {
 
             // Under the hood, a client's username will be sent after a quit
@@ -88,6 +90,7 @@ public class BattleServer implements MessageListener {
             command = message.split(" ");
             String toShow = command[1];
             String username = command[2];
+            game.display(toShow, username);
         }
     }
 

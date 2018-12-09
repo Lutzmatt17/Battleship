@@ -3,7 +3,6 @@ package server;
 import java.util.Random;
 
 public class Grid {
-
     /** Default symbol for a hit. */
     private static final String HIT = "@";
 
@@ -76,9 +75,7 @@ public class Grid {
      * Updates the grid based on a passed in grid.
      * @param grid The specified grid to update it to.
      */
-    public void updateGrid(String[][] grid){
-        this.grid = grid;
-    }
+
 
     /**
      * Returns the 2D array representing our grid.
@@ -88,27 +85,8 @@ public class Grid {
         return grid;
     }
 
-    /**
-     * Method that tries to hit a ship on the specified opponents grid based off of the specified row or col coordinates
-     * @param oppGrid - Opponents grid
-     * @param row - x coordinate of attack
-     * @param col - y coordinate of attack
-     * @return true or false depending on whether the attack was a hit or not
-     */
-    public boolean tryHit(String[][] oppGrid, int row, int col){
-        boolean result = false;
-        if(oppGrid[row][col].equals(Ship.BATTLESHIP.getSymbol()) ||
-                oppGrid[row][col].equals(Ship.CARRIER.getSymbol()) ||
-                oppGrid[row][col].equals(Ship.SUBMARINE.getSymbol()) ||
-                oppGrid[row][col].equals(Ship.CRUISER.getSymbol()) ||
-                oppGrid[row][col].equals(Ship.DESTROYER.getSymbol())){
-            oppGrid[row][col] = HIT;
-            result = true;
-        }else{
-            oppGrid[row][col] = MISS;
-        }
-        updateGrid(oppGrid);
-        return result;
+    public void setGrid(String[][] grid) {
+        this.grid = grid;
     }
 
     /**
