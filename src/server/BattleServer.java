@@ -108,6 +108,7 @@ public class BattleServer implements MessageListener {
         broadcast("!!! " + command[1] + " surrendered.");
         source.removeMessageListener(this);
         sourceClosed(players.get(command[1]));
+        usernames.remove(command[1]);
         players.remove(command[1]);
     }
 
