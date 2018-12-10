@@ -148,7 +148,8 @@ public class BattleServer implements MessageListener {
                 }
                 if(usernames.size() == 1) {
                     gameInProgress = false;
-                    broadcast(String.format("%s has won!", usernames.get(0)));
+                    broadcast(String.format("GAME OVER: %s wins!",
+                            usernames.get(0)));
                 } else {
                     broadcast(String.format("%s it is your turn", usernames.get(current)));
                 }
@@ -156,6 +157,8 @@ public class BattleServer implements MessageListener {
         } else if(message.contains("/attack") || message.contains("/quit") ||
                     message.contains("/show")){
             broadcast("Game not in progress.");
+        } else {
+            ((ConnectionAgent) source).sendMessages("Invalid command: " + message);
         }
     }
 
