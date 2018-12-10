@@ -80,7 +80,6 @@ public class BattleServer implements MessageListener {
     }
 
     private void playReceived(String message, MessageSource source) {
-        String[] command;
 
         if(players.size() < 2) {
             broadcast("Not enough players to play the game.");
@@ -157,8 +156,6 @@ public class BattleServer implements MessageListener {
         } else if(message.contains("/attack") || message.contains("/quit") ||
                     message.contains("/show")){
             broadcast("Game not in progress.");
-        } else {
-            ((ConnectionAgent) source).sendMessages("Invalid command: " + message);
         }
     }
 
