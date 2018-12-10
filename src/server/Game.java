@@ -44,6 +44,25 @@ public class Game {
         return result;
     }
 
+    public boolean sunkenShips(String player){
+        boolean result = false;
+        int counter = 0;
+        String grid[][] = playerGrids.get(player).getGrid();
+        for(int i = 0; i < grid.length; i++){
+            for(int j = 0; j < grid.length; j++){
+                if (grid[i][j].equals(HIT)){
+                    counter++;
+                }
+            }
+        }
+
+        if (counter == 17){
+            result = true;
+        }
+
+        return result;
+    }
+
 
 
     public String display(String toShow, String userName){
