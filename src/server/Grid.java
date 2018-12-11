@@ -252,7 +252,8 @@ public class Grid {
     }
 
     /**
-     * Outputs the owner's grid to the console.
+     * Outputs the owner's grid.
+     * @return A String representation of the owner's grid.
      */
     public String displayOwnerGrid() {
         StringBuilder builder = new StringBuilder();
@@ -279,7 +280,8 @@ public class Grid {
     }
 
     /**
-     * Outputs an opponent's grid to the console.
+     * Outputs an opponent's grid.
+     * @return a String representation of the opponent's grid.
      */
     public String displayRivalGrid() {
         StringBuilder builder = new StringBuilder();

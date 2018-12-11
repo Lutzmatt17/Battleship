@@ -1,8 +1,14 @@
 package server;
 
+/**
+ * Runs the server-side version of Battleship.
+ * @author Matt Lutz and Brandon Townsend
+ * @version December 2018
+ */
 public class BattleShipDriver {
 
-    /** Offline demo version
+    /** Offline demo version -- do not recommend use as some functionality
+     * has changed.
     public static void main(String[] args) {
         Grid testGrid = new Grid(5);
         testGrid.displayOwnerGrid();

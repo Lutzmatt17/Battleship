@@ -2,6 +2,11 @@ package client;
 
 import java.util.Scanner;
 
+/**
+ * Runs the client-side version of the Battleship project.
+ * @author Matt Lutz and Brandon Townsend
+ * @version December 2018
+ */
 public class BattleDriver {
 
     public static void main(String[] args) {

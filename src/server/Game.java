@@ -2,6 +2,11 @@ package server;
 
 import java.util.HashMap;
 
+/**
+ * Class that contains the logic for the game of Battleship.
+ * @author Matt Lutz and Brandon Townsend
+ * @version December 2018
+ */
 public class Game {
     /** Default symbol for a hit. */
     private static final String HIT = "@";
@@ -9,10 +14,16 @@ public class Game {
     /** Default symbol for a miss. */
     private static final String MISS = "X";
 
+    /** Mapping of a username to each grid. */
     private HashMap<String, Grid> playerGrids;
 
-    int gridSize;
+    /** Size to build the grids. */
+    private int gridSize;
 
+    /**
+     * Constructor for a Game object.
+     * @param size The size of grid to be built.
+     */
     public Game(int size) {
         playerGrids = new HashMap<>();
         this.gridSize = size;
@@ -44,12 +55,17 @@ public class Game {
         return result;
     }
 
+    /**
+     * Returns true if all of a player's ships has been sunk.
+     * @param player The player whom ships we are checking.
+     * @return True if all the ships have been sunk, false otherwise.
+     */
     public boolean sunkenShips(String player){
         boolean result = false;
         int counter = 0;
         String grid[][] = playerGrids.get(player).getGrid();
-        for(int i = 0; i < grid.length; i++){
-            for(int j = 0; j < grid.length; j++){
+        for(int i = 0; i < gridSize; i++){
+            for(int j = 0; j < gridSize; j++){
                 if (grid[i][j].equals(HIT)){
                     counter++;
                 }
@@ -63,8 +79,12 @@ public class Game {
         return result;
     }
 
-
-
+    /**
+     * Displays a grid of a specified player.
+     * @param toShow The grid of the player the user would like to see.
+     * @param userName The username of the person issuing the command.
+     * @return A String representation of a player's grid.
+     */
     public String display(String toShow, String userName){
         if(toShow.equals(userName)){
             return playerGrids.get(userName).displayOwnerGrid();
@@ -73,10 +93,26 @@ public class Game {
         }
     }
 
+    /**
+     * Returns the HashMap of player grids.
+     * @return The HashMap of player grids.
+     */
     public HashMap<String, Grid> getPlayerGrids() {
         return playerGrids;
     }
 
+    /**
+     * Adds a player to the game of battleship.
+     * @param player The name of the player to add.
+     */
+    public void addPlayer(String player) {
+        playerGrids.put(player, new Grid(gridSize));
+    }
+
+    /**
+     * Removes of player from the game of battleship.
+     * @param player The name of the player to remove.
+     */
     public void removePlayer(String player){
         playerGrids.remove(player);
     }
